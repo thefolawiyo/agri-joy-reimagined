@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
-import { Reveal } from "./Reveal";
+import { ArrowRight } from "lucide-react";
+import { WordsPullUpMultiStyle } from "./WordsPullUp";
 
 type Row = {
   product: string;
@@ -28,64 +28,72 @@ export function Catalogue() {
   const visible = active === "All" ? rows : rows.filter((r) => r.category === active);
 
   return (
-    <section id="markets" className="mx-auto max-w-[1500px] px-6 py-24 md:px-10 md:py-36">
-      <Reveal className="rule flex flex-col gap-8 pt-8 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="label text-ink/45">Sourcing catalogue</p>
-          <h2 className="display mt-6 max-w-[16ch] text-[clamp(2.4rem,6vw,5rem)]">
-            Products we source and move
-          </h2>
+    <section id="markets" className="bg-black px-4 py-20 md:px-6 md:py-28">
+      <div className="mx-auto max-w-7xl">
+        <h2 className="max-w-3xl text-xl font-normal sm:text-2xl md:text-3xl lg:text-4xl">
+          <WordsPullUpMultiStyle
+            segments={[
+              { text: "Products we source and move.", className: "text-primary" },
+              {
+                text: "Origins, markets and availability confirmed per enquiry.",
+                className: "text-gray-500",
+              },
+            ]}
+          />
+        </h2>
+
+        <div className="mt-10 flex flex-wrap gap-2">
+          {filters.map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setActive(f)}
+              className={`rounded-full px-4 py-2 text-xs transition-colors sm:text-sm ${
+                active === f
+                  ? "bg-primary text-black"
+                  : "bg-[#212121] text-gray-400 hover:text-primary"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
         </div>
-        <p className="text-ink/60 max-w-[38ch] text-sm leading-relaxed">
-          An illustrative view of the categories Earth trades in. Origins, markets and availability
-          are confirmed per enquiry — nothing here is a live market quote.
+
+        <div className="mt-8 overflow-hidden rounded-2xl bg-[#101010]">
+          <div className="hidden grid-cols-12 gap-6 px-6 py-4 text-[10px] tracking-[0.2em] text-gray-500 uppercase md:grid">
+            <span className="col-span-3">Product</span>
+            <span className="col-span-2">Category</span>
+            <span className="col-span-3">Origin</span>
+            <span className="col-span-3">Market</span>
+            <span className="col-span-1 text-right">Status</span>
+          </div>
+
+          {visible.map((r) => (
+            <a
+              key={r.product}
+              href="#contact"
+              className="group grid grid-cols-1 items-baseline gap-1 border-t border-white/10 px-6 py-5 transition-colors hover:bg-[#181818] md:grid-cols-12 md:gap-6"
+            >
+              <span
+                className="col-span-3 text-xl md:text-2xl"
+                style={{ color: "#E1E0CC" }}
+              >
+                {r.product}
+              </span>
+              <span className="col-span-2 text-xs text-gray-400 sm:text-sm">{r.category}</span>
+              <span className="col-span-3 text-xs text-gray-400 sm:text-sm">{r.origin}</span>
+              <span className="col-span-3 text-xs text-gray-400 sm:text-sm">{r.market}</span>
+              <span className="text-primary/70 col-span-1 flex items-center gap-1 text-[10px] tracking-[0.15em] uppercase md:justify-end">
+                {r.status}
+                <ArrowRight className="h-3.5 w-3.5 -rotate-45 opacity-0 transition-opacity group-hover:opacity-100" />
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <p className="mt-4 text-[11px] text-gray-500">
+          Illustrative catalogue — not a live market quote.
         </p>
-      </Reveal>
-
-      <div className="mt-12 flex flex-wrap gap-2">
-        {filters.map((f) => (
-          <button
-            key={f}
-            type="button"
-            onClick={() => setActive(f)}
-            className={`label border px-4 py-2.5 transition-colors ${
-              active === f
-                ? "bg-ink text-paper border-ink"
-                : "border-ink/20 text-ink/60 hover:border-ink/50"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-10">
-        <div className="label text-ink/40 rule hidden grid-cols-12 gap-6 py-4 md:grid">
-          <span className="col-span-3">Product</span>
-          <span className="col-span-2">Category</span>
-          <span className="col-span-3">Origin</span>
-          <span className="col-span-3">Market</span>
-          <span className="col-span-1 text-right">Status</span>
-        </div>
-
-        {visible.map((r) => (
-          <a
-            key={r.product}
-            href="#contact"
-            className="rule group grid grid-cols-1 items-baseline gap-2 py-6 md:grid-cols-12 md:gap-6"
-          >
-            <span className="display col-span-3 text-3xl transition-colors group-hover:text-clay">
-              {r.product}
-            </span>
-            <span className="text-ink/55 col-span-2 text-sm">{r.category}</span>
-            <span className="text-ink/55 col-span-3 text-sm">{r.origin}</span>
-            <span className="text-ink/55 col-span-3 text-sm">{r.market}</span>
-            <span className="label text-ink/45 col-span-1 flex items-center justify-start gap-1 md:justify-end">
-              {r.status}
-              <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-            </span>
-          </a>
-        ))}
       </div>
     </section>
   );
